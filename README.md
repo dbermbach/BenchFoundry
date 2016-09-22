@@ -17,7 +17,7 @@ BenchFoundry already comes with a trace generator which aims to provoke the maxi
 Hint: currently, some unit tests are broken - make sure to skip tests for builds :)
 
 ## Running BenchFoundry
-1. Install Java on master and slave machines, put the log4j2.xml file and the benchmw.jar in the same folder on all machines.
+1. Install Java on master and slave machines, put the log4j2.xml file and the benchfoundry.jar in the same folder on all machines.
 2. Put an updated version of benchfoundry.properties and slaves.properties on the master machine
 3. Use a trace generator or existing input files (traces, schema, oplist, param lists) and put them on the master machine
 4. Start BenchFoundry on the slave machines using `java -jar benchfoundry.jar <port>` where port is identical to the one specified in the slaves.properties file
