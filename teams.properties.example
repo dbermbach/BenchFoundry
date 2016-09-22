@@ -1,0 +1,9 @@
+# This is the properties file which is used to store the build settings. Uncomment the
+# appropriate lines and copy the file to teams.properties in the base directory.
+
+# To run Thrift on Linux/Unix/Mac uncomment the following line and replace with the appropriate
+# path to the Thrift IDL compiler.
+#thrift.executable=/usr/local/bin/thrift
+
+# To run Thrift on Windows uncomment the following line and update the path if necessary.
+#thrift.executable=c:\thrift\bin\thrift.exe
