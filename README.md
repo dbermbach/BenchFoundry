@@ -14,7 +14,7 @@ BenchFoundry already comes with a trace generator which aims to provoke the maxi
 3. Edit `teams.properties` to set `thrift.executable` to the Thrift executable path
 4. Now build and test with 
 `mvn clean generate-sources compile test`
-Hint: currently, some unit tests are broken - make sure to skip tests for builds :)
+Hint: currently, some unit tests may be broken - make sure to skip tests for builds :)
 
 ## Running BenchFoundry
 1. Install Java on master and slave machines, put the log4j2.xml file and the benchfoundry.jar in the same folder on all machines.
