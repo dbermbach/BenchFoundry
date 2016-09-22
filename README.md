@@ -9,7 +9,7 @@ BenchFoundry already comes with a trace generator which aims to provoke the maxi
 
 
 ## Build process
-1. Install Apache Thrift from [https://thrift.apache.org/download|https://thrift.apache.org/download]
+1. Install Apache Thrift from [https://thrift.apache.org/download]
 2. Copy teams.properties.example to teams.properties
 3. Edit `teams.properties` to set `thrift.executable` to the Thrift executable path
 4. Now build and test with 
