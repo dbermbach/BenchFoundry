@@ -29,9 +29,10 @@ Hint: currently, some unit tests may be broken - make sure to skip tests for bui
 tba
 
 ### TPC-C Inspired Benchmark
-Main class: de.tuberlin.ise.benchfoundry.tracegeneration.tpccinspiredbenchmark.TraceGenerator.java
+#### Main Class
+de.tuberlin.ise.benchfoundry.tracegeneration.tpccinspiredbenchmark.TraceGenerator.java
 
-The generator outputs 8 files:
+#### Generator Outputs (8 files)
 1. tpcc_props: Contains main properties for the execution of the benchmark.
 2. tpcc_schema: Contains schema definitons.
 3. tpcc_operation: Contains business operations used in LOAD, WARM or RUN phases.
@@ -41,7 +42,7 @@ The generator outputs 8 files:
 7. tpcc_warm: Contains business processes for the phase WARM.
 8. tpcc_run: Contains business processes for the phase RUN.
 
-The generator allows to customize traces with the folloing set of CLI parameters:
+#### CLI parameters
 1. "--datasetScaler" [Integer i: i>0 (default: 1)] - Scales the inital dataset for the benchmark according to the TPC-C specification (#WAREHOUSES).
 2. "--runtime" [Integer i: i>0 (default: 120)] - Defines the runtime of the RUN phase in seconds.
 3. "--paymentProcessTarget" [Integer i: i>-1 (default: 1)] - Defines the target number of "PAYMENT" processes that are scheduled per second.
