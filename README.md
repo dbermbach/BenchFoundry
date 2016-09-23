@@ -26,7 +26,7 @@ Hint: currently, some unit tests may be broken - make sure to skip tests for bui
 
 ## Workload Generators
 ### Consistency Benchmark
-tba
+Simply run the main class de.tuberlin.ise.benchfoundry.tracegeneration.consistencybenchmark.ConsistencyBenchmarkingTraceGenerator which will interactively query input parameters and create the output trace file. Additional parameters are (somewhat hidden) in class de.tuberlin.ise.benchfoundry.tracegeneration.consistencybenchmark.StaticContent
 
 ### TPC-C Inspired Benchmark
 #### Main Class
@@ -34,13 +34,13 @@ de.tuberlin.ise.benchfoundry.tracegeneration.tpccinspiredbenchmark.TraceGenerato
 
 #### Generator Outputs (8 files)
 1. **tpcc_props**: Contains main properties for the execution of the benchmark.
-2. **tpcc_schema**: Contains schema definitons.
-3. **tpcc_operation**: Contains business operations used in LOAD, WARM or RUN phases.
-4. **tpcc_param**: Contains parameters used by business operations in LOAD, WARM or RUN phases.
-5. **tpcc_cparam**: Contains additional custom parameters used by business operations in LOAD, WARM or RUN phases.
-6. **tpcc_load**: Contains business processes for the phase LOAD.
-7. **tpcc_warm**: Contains business processes for the phase WARM.
-8. **tpcc_run**: Contains business processes for the phase RUN.
+2. **tpcc_schema**: Contains schema definitions.
+3. **tpcc_operation**: Contains business operations used in PRELOAD, WARMUP, or EXPERIMENT phases.
+4. **tpcc_param**: Contains parameters used by business operations in PRELOAD, WARMUP, or EXPERIMENT phases.
+5. **tpcc_cparam**: Contains additional custom parameters used by business operations in PRELOAD, WARMUP, or EXPERIMENT phases.
+6. **tpcc_load**: Contains business processes for the phase PRELOAD.
+7. **tpcc_warm**: Contains business processes for the phase WARMUP.
+8. **tpcc_run**: Contains business processes for the phase EXPERIMENT.
 
 #### CLI parameters (6 options)
 1. "**--datasetScaler**" [Integer i: i>0 (default: 1)] - Scales the inital dataset for the benchmark according to the TPC-C specification (#WAREHOUSES).
