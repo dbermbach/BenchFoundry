@@ -4,7 +4,7 @@ BenchFoundry is a natively distributed benchmarking framework for the execution 
 ## Current implementation state:
 BenchFoundry currently supports relational database systems and right now only comes with a connector for MariaDB. At the moment, we're working on adding support for column stores and key-values stores but will also add connectors for other RDBMS.
 The analysis module currently only calculates performance metrics. Right now, we're working on adding consistency metrics.
-BenchFoundry already comes with a trace generator which aims to provoke the maximum staleness observable in a storage system. We'll add another trace generator based on TPC-C soon.
+BenchFoundry already comes with a trace generator which aims to provoke the maximum staleness observable in a storage system and another trace generator based on TPC-C.
 
 
 
@@ -23,3 +23,30 @@ Hint: currently, some unit tests may be broken - make sure to skip tests for bui
 4. Start BenchFoundry on the slave machines using `java -jar benchfoundry.jar <port>` where port is identical to the one specified in the slaves.properties file
 5. Start BenchFoundry on the master machine using `java -jar benchfoundry.jar <config file>` where config file specifies the location of the benchfoundry.properties file. If you omit this parameter, the BenchFoundry master will default to benchfoundry.properties in the current folder.
 6. Collect the result files from the specified result directory and run an analytics process.
+
+## Workload Generators
+### Consistency Benchmark
+tba
+
+### TPC-C Inspired Benchmark
+Main class: de.tuberlin.ise.benchfoundry.tracegeneration.tpccinspiredbenchmark.TraceGenerator.java
+
+The generator outputs 8 files:
+1. tpcc_props: Contains main properties for the execution of the benchmark.
+2. tpcc_schema: Contains schema definitons.
+3. tpcc_operation: Contains business operations used in LOAD, WARM or RUN phases.
+4. tpcc_param: Contains parameters used by business operations in LOAD, WARM or RUN phases.
+5. tpcc_cparam: Contains additional custom parameters used by business operations in LOAD, WARM or RUN phases.
+6. tpcc_load: Contains business processes for the phase LOAD.
+7. tpcc_warm: Contains business processes for the phase WARM.
+8. tpcc_run: Contains business processes for the phase RUN.
+
+The generator allows to customize traces with the folloing set of CLI parameters:
+1. "--datasetScaler" [Integer i: i>0 (default: 1)] - Scales the inital dataset for the benchmark according to the TPC-C specification (#WAREHOUSES).
+2. "--runtime" [Integer i: i>0 (default: 120)] - Defines the runtime of the RUN phase in seconds.
+3. "--paymentProcessTarget" [Integer i: i>-1 (default: 1)] - Defines the target number of "PAYMENT" processes that are scheduled per second.
+4. "--orderstatusProcessTarget" [Integer i: i>-1 (default: 1)] - Defines the target number of "ORDERSTATUS" processes that are scheduled per second.
+5. "--neworderProcessTarget" [Integer i: i>-1 (default: 1)] - Defines the target number of "NEWORDER" processes that are scheduled per second.
+6. "--processTargetScaler" [Integer i: i>-1 (default: 10)] - Scales (multiplies) the target number of all processes that are scheduled per second.
+
+
