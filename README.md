@@ -33,21 +33,21 @@ tba
 de.tuberlin.ise.benchfoundry.tracegeneration.tpccinspiredbenchmark.TraceGenerator.java
 
 #### Generator Outputs (8 files)
-1. tpcc_props: Contains main properties for the execution of the benchmark.
-2. tpcc_schema: Contains schema definitons.
-3. tpcc_operation: Contains business operations used in LOAD, WARM or RUN phases.
-4. tpcc_param: Contains parameters used by business operations in LOAD, WARM or RUN phases.
-5. tpcc_cparam: Contains additional custom parameters used by business operations in LOAD, WARM or RUN phases.
-6. tpcc_load: Contains business processes for the phase LOAD.
-7. tpcc_warm: Contains business processes for the phase WARM.
-8. tpcc_run: Contains business processes for the phase RUN.
+1. **tpcc_props**: Contains main properties for the execution of the benchmark.
+2. **tpcc_schema**: Contains schema definitons.
+3. **tpcc_operation**: Contains business operations used in LOAD, WARM or RUN phases.
+4. **tpcc_param**: Contains parameters used by business operations in LOAD, WARM or RUN phases.
+5. **tpcc_cparam**: Contains additional custom parameters used by business operations in LOAD, WARM or RUN phases.
+6. **tpcc_load**: Contains business processes for the phase LOAD.
+7. **tpcc_warm**: Contains business processes for the phase WARM.
+8. **tpcc_run**: Contains business processes for the phase RUN.
 
-#### CLI parameters
-1. "--datasetScaler" [Integer i: i>0 (default: 1)] - Scales the inital dataset for the benchmark according to the TPC-C specification (#WAREHOUSES).
-2. "--runtime" [Integer i: i>0 (default: 120)] - Defines the runtime of the RUN phase in seconds.
-3. "--paymentProcessTarget" [Integer i: i>-1 (default: 1)] - Defines the target number of "PAYMENT" processes that are scheduled per second.
-4. "--orderstatusProcessTarget" [Integer i: i>-1 (default: 1)] - Defines the target number of "ORDERSTATUS" processes that are scheduled per second.
-5. "--neworderProcessTarget" [Integer i: i>-1 (default: 1)] - Defines the target number of "NEWORDER" processes that are scheduled per second.
-6. "--processTargetScaler" [Integer i: i>-1 (default: 10)] - Scales (multiplies) the target number of all processes that are scheduled per second.
+#### CLI parameters (6 options)
+1. "**--datasetScaler**" [Integer i: i>0 (default: 1)] - Scales the inital dataset for the benchmark according to the TPC-C specification (#WAREHOUSES).
+2. "**--runtime**" [Integer i: i>0 (default: 120)] - Defines the runtime of the RUN phase in seconds.
+3. "**--paymentProcessTarget**" [Integer i: i>-1 (default: 1)] - Defines the target number of "PAYMENT" processes that are scheduled per second.
+4. "**--orderstatusProcessTarget**" [Integer i: i>-1 (default: 1)] - Defines the target number of "ORDERSTATUS" processes that are scheduled per second.
+5. "**--neworderProcessTarget**" [Integer i: i>-1 (default: 1)] - Defines the target number of "NEWORDER" processes that are scheduled per second.
+6. "**--processTargetScaler**" [Integer i: i>-1 (default: 10)] - Scales (multiplies) the target number of all processes that are scheduled per second.
 
 
