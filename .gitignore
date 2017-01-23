@@ -1,5 +1,10 @@
 # Created by https://www.gitignore.io
 
+### BenchFoundry ###
+results/
+Master-result.log
+BenchFoundry.iml
+
 ### Eclipse ###
 *.pydevproject
 .metadata
@@ -70,6 +75,8 @@ hs_err_pid*
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+
+.idea/
 
 # User-specific stuff:
 .idea/workspace.xml
