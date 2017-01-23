@@ -22,7 +22,8 @@ public class LogicalQueryRegistryTest extends TestCase {
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		DataSchema.getInstance().addSchemaInputFile("samples/schema.txt");
+		// TODO We should avoid external dependencies in unit tests.
+		DataSchema.getInstance().addSchemaInputFile("tpcc/tpcc_schema");
 	}
 
 	/* (non-Javadoc)
@@ -56,6 +57,7 @@ public class LogicalQueryRegistryTest extends TestCase {
 			
 			is.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 			fail("Unable to parse query");
 		}
 	}
@@ -67,7 +69,8 @@ public class LogicalQueryRegistryTest extends TestCase {
 
 		try {
 			// register the queries into the LogicalQueryRegistry
-			LogicalQueryRegistry.getInstance().addQueryInputFile("samples/oplist_example.txt");
+			// TODO We should avoid external dependencies in unit tests.
+			LogicalQueryRegistry.getInstance().addQueryInputFile("tpcc/tpcc_operation");
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Unable to parse query");
