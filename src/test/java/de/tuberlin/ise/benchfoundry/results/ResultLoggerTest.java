@@ -81,10 +81,10 @@ public class ResultLoggerTest extends TestCase {
         try (Stream<String> stream = Files.lines(Paths.get(dumpFileDir, dumpFileName))) {
             String[] lines = stream.toArray(String[]::new);
             String[] line = lines[0].split(";");
-            assertEquals("ProcessId is 0", line[0], 0);
-            assertEquals("TransactionId is 0", line[1], 0);
-            assertEquals("OperationId is 0", line[2], 0);
-            assertEquals("ResultType is SUCCESS", line[7], "SUCCESSFUL");
+            assertEquals("ProcessId", line[0], "0");
+            assertEquals("TransactionId", line[1], "0");
+            assertEquals("OperationId", line[2], "0");
+            assertEquals("ResultType is SUCCESS", line[6], "SUCCESSFUL");
         } catch (IOException e) {
             e.printStackTrace();
             fail("Unable to stream measurements from dump file.");
