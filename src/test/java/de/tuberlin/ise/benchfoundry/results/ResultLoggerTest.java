@@ -79,7 +79,7 @@ public class ResultLoggerTest extends TestCase {
             fail("Unable to dump measurements via ResultLogReader.");
         }
         try (Stream<String> stream = Files.lines(Paths.get(dumpFileDir, dumpFileName))) {
-            String[] lines = (String[]) stream.toArray();
+            String[] lines = stream.toArray(String[]::new);
             String[] line = lines[0].split(";");
             assertEquals("ProcessId is 0", line[0], 0);
             assertEquals("TransactionId is 0", line[1], 0);
