@@ -36,7 +36,7 @@ public class RelationalTransaction {
 	protected long transactionEnd;
 
 	/** Status code of the transaction response, e.g., OK, FAILURE, ... */
-	protected ResultType transactionStatus = ResultType.SUCCESSFUL;
+	protected ResultType transactionStatus = ResultType.SUCCESSFUL; //FIXME actually use this field
 
 	/**
 	 * Lookup of {@link RelationalOperation} by ID of {@link BusinessOperation}

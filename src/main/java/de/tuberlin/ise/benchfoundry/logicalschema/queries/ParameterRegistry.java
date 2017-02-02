@@ -19,9 +19,6 @@ import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.tuberlin.ise.benchfoundry.connectors.impl.DummyRelationalConnector;
-import net.sf.jsqlparser.parser.ParseException;
-
 /**
  * parses and holds all query parameters from the param and custom_param input
  * files

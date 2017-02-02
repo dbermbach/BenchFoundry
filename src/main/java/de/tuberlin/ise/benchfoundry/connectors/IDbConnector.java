@@ -9,13 +9,14 @@ import java.util.List;
 import de.tuberlin.ise.benchfoundry.connectors.exceptions.PrepareTransactionException;
 import de.tuberlin.ise.benchfoundry.physicalschema.model.AbstractPhysicalSchema;
 import de.tuberlin.ise.benchfoundry.physicalschema.model.AbstractRequest;
-import de.tuberlin.ise.benchfoundry.results.ResultLogger;
 import de.tuberlin.ise.benchfoundry.scheduling.BusinessOperation;
 import de.tuberlin.ise.benchfoundry.scheduling.BusinessProcess;
 import de.tuberlin.ise.benchfoundry.scheduling.BusinessTransaction;
 import de.tuberlin.ise.benchfoundry.util.SelectiveLogEntry;
 
 /**
+ * <br>Note: Non-abstract subclasses must define a no-argument constructor.
+ * 
  * @author Dave
  *
  */
@@ -32,6 +33,9 @@ public interface IDbConnector extends Serializable {
 	public void setupPhysicalSchema(AbstractPhysicalSchema schema);
 
 	/**
+	 * 
+	 * is called a short period of time before calling
+	 * executeBusinessTransaction(...)
 	 * 
 	 * @param processId
 	 *            id of the surrounding {@link BusinessProcess}
@@ -93,29 +97,31 @@ public interface IDbConnector extends Serializable {
 
 	/**
 	 * 
-	 * @return a serialized version of this connector which can then be sent to
-	 *         slaves
+	 * @return a serialized version of all data from this connector which can
+	 *         then be sent to slaves
 	 */
-	public byte[] serializeConnector();
+	public byte[] serializeConnectorState();
 
 	/**
-	 * deserializes an {@link IDbConnector} instance serialized by another
-	 * instance of the same class.
+	 * deserializes and applies the results of a call to {@link IDbConnector}
+	 * .serizalizeConnectorState(). Is invoked on slaves directly after a call
+	 * to their no argument constructor.
 	 * 
-	 * @param serializedConnector
-	 *            a byte [] as returned by serializeConnector()
-	 * @return an object that is a precise copy of the originally serialized
-	 *         object
+	 * @param serializedState
+	 *            a byte [] as returned by serializeConnectorState()
+	 * 
 	 */
-	public IDbConnector deserializeConnector(byte[] serializedConnector);
+	public void applySerializedConnectorState(byte[] serializedState);
 
 	/**
-	 * This method initializes state of the connector
+	 * This method initializes state of the connector for the actual test run
+	 * (invoked after setting up schemas). It is also invoked for opening database
+	 * connections on slaves.
 	 */
 	public void init();
 
 	/**
-	 * THis method cleans up any state of the connector.
+	 * This method cleans up any state of the connector.
 	 */
 	public void cleanup();
 

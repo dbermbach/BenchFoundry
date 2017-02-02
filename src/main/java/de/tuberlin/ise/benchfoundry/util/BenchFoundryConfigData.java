@@ -16,7 +16,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.tuberlin.ise.benchfoundry.connectors.IDbConnector;
-import de.tuberlin.ise.benchfoundry.connectors.impl.DummyRelationalConnector;
+import de.tuberlin.ise.benchfoundry.connectors.impl.DerbyRelationalConnector;
 import de.tuberlin.ise.benchfoundry.physicalschema.factory.AbstractPhysicalSchemaFactory;
 import de.tuberlin.ise.benchfoundry.physicalschema.factory.RelationalPhysicalSchemaFactory;
 import de.tuberlin.ise.benchfoundry.physicalschema.model.AbstractPhysicalSchema;
@@ -85,7 +85,7 @@ public class BenchFoundryConfigData {
 	/**
 	 * class of the connector to the actual data store
 	 */
-	public static Class<? extends IDbConnector> dbConnectorClass = DummyRelationalConnector.class;
+	public static Class<? extends IDbConnector> dbConnectorClass = DerbyRelationalConnector.class;
 
 	/** connector to the actual data store */
 	public static IDbConnector dbConnector;
@@ -196,7 +196,7 @@ public class BenchFoundryConfigData {
 			oos.writeObject(physicalSchemaFactoryClass.newInstance()
 					.serializeSchema(physicalSchema));
 			oos.writeObject(dbConnectorClass);
-			oos.writeObject(dbConnector.serializeConnector());
+			oos.writeObject(dbConnector.serializeConnectorState());
 			oos.writeObject(transactionPrepareTimeInMs);
 			oos.writeObject(processScheduleAheadTimeInMs);
 			oos.writeObject(name);
@@ -235,7 +235,8 @@ public class BenchFoundryConfigData {
 			physicalSchema = physicalSchemaFactoryClass.newInstance()
 					.deserializeSchema((byte[]) ois.readObject());
 			dbConnectorClass = (Class<? extends IDbConnector>) ois.readObject();
-			dbConnector = dbConnectorClass.newInstance().deserializeConnector(
+			dbConnector = dbConnectorClass.newInstance();
+			dbConnector.applySerializedConnectorState(
 					(byte[]) ois.readObject());
 			transactionPrepareTimeInMs = (long) ois.readObject();
 			processScheduleAheadTimeInMs = (long) ois.readObject();
