@@ -102,6 +102,14 @@ public class DerbyRelationalConnector extends RelationalDbConnector {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see de.tuberlin.ise.benchfoundry.connectors.IDbConnector#readConfigData(java.lang.String)
+	 */
+	@Override
+	public void readConfigData(String configFilename) {
+		//no need to do anything here
+	}
+
 //	public static void main(String[] args) throws Exception {
 //		LoggerContext context = (org.apache.logging.log4j.core.LoggerContext) LogManager
 //				.getContext(false);

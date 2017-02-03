@@ -15,7 +15,8 @@ import de.tuberlin.ise.benchfoundry.scheduling.BusinessTransaction;
 import de.tuberlin.ise.benchfoundry.util.SelectiveLogEntry;
 
 /**
- * <br>Note: Non-abstract subclasses must define a no-argument constructor.
+ * <br>
+ * Note: Non-abstract subclasses must define a no-argument constructor.
  * 
  * @author Dave
  *
@@ -115,8 +116,8 @@ public interface IDbConnector extends Serializable {
 
 	/**
 	 * This method initializes state of the connector for the actual test run
-	 * (invoked after setting up schemas). It is also invoked for opening database
-	 * connections on slaves.
+	 * (invoked after setting up schemas). It is also invoked for opening
+	 * database connections on slaves.
 	 */
 	public void init();
 
@@ -124,5 +125,16 @@ public interface IDbConnector extends Serializable {
 	 * This method cleans up any state of the connector.
 	 */
 	public void cleanup();
+
+	/**
+	 * is invoked as part of the configuration process. Concrete connector
+	 * instances are supposed to read their configuration information from the
+	 * specified file location.
+	 * 
+	 * @param configFilename
+	 *            the name of the dbconnector config file provided in the
+	 *            benchfoundry.properties
+	 */
+	public void readConfigData(String configFilename);
 
 }

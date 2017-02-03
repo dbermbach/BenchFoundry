@@ -32,70 +32,6 @@ public class MariadbRelationalConnector extends RelationalDbConnector {
 	private String PassCached;
 	private String DatabaseCached;
 
-	/**
-	 * reads the MariaDB config file and caches that config data for subsequent
-	 * calls to getDatabaseURI() etc.
-	 */
-	private void readConfigFile() {
-		if (URICached != null)
-			return; // will be executed only once
-		Properties prop = new Properties();
-		InputStream propIn;
-		try {
-			propIn = new FileInputStream(
-					BenchFoundryConfigData.dbConnectorConfigFile);
-
-			prop.load(propIn);
-
-			if (!prop.containsKey(URI_KEY)) {
-				throw new IllegalArgumentException(
-						"Missing property with key '" + URI_KEY
-								+ "' in MariaDB configuration file '"
-								+ BenchFoundryConfigData.dbConnectorConfigFile
-								+ "'.");
-			}
-			if (!prop.containsKey(USER_KEY)) {
-				throw new IllegalArgumentException(
-						"Missing property with key '" + USER_KEY
-								+ "' in MariaDB configuration file '"
-								+ BenchFoundryConfigData.dbConnectorConfigFile
-								+ "'.");
-			}
-			if (!prop.containsKey(PASS_KEY)) {
-				throw new IllegalArgumentException(
-						"Missing property with key '" + PASS_KEY
-								+ "' in MariaDB configuration file '"
-								+ BenchFoundryConfigData.dbConnectorConfigFile
-								+ "'.");
-			}
-			if (!prop.containsKey(DB_KEY)) {
-				throw new IllegalArgumentException(
-						"Missing property with key '" + DB_KEY
-								+ "' in MariaDB configuration file '"
-								+ BenchFoundryConfigData.dbConnectorConfigFile
-								+ "'.");
-			}
-
-			URICached = prop.getProperty(URI_KEY);
-			UserCached = prop.getProperty(USER_KEY, "root");
-			PassCached = prop.getProperty(PASS_KEY, "root");
-			DatabaseCached = prop.getProperty(DB_KEY, "test");
-
-			if (URICached == null || URICached.length() == 0)
-				throw new IllegalArgumentException("Illegal value for key '"
-						+ URI_KEY + "' in MariaDB configuration file '"
-						+ BenchFoundryConfigData.dbConnectorConfigFile + "'.");
-
-		} catch (Exception e) {
-			LOG.fatal("Cannot run BenchFoundry without dbconnector config file. Reading config file "
-					+ BenchFoundryConfigData.dbConnectorConfigFile
-					+ " failed: " + e.getMessage());
-			e.printStackTrace();
-			System.exit(-1);
-
-		}
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -105,7 +41,7 @@ public class MariadbRelationalConnector extends RelationalDbConnector {
 	 */
 	@Override
 	protected String getDatabaseURI() {
-		readConfigFile();
+		readConfigData(BenchFoundryConfigData.dbConnectorConfigFile);
 		return URICached + DatabaseCached;
 	}
 
@@ -117,7 +53,7 @@ public class MariadbRelationalConnector extends RelationalDbConnector {
 	 */
 	@Override
 	protected String getDatabaseSystemURI() {
-		readConfigFile();
+		readConfigData(BenchFoundryConfigData.dbConnectorConfigFile);
 		return URICached;
 	}
 
@@ -129,7 +65,7 @@ public class MariadbRelationalConnector extends RelationalDbConnector {
 	 */
 	@Override
 	protected String getDatabaseUsername() {
-		readConfigFile();
+		readConfigData(BenchFoundryConfigData.dbConnectorConfigFile);
 		return UserCached;
 	}
 
@@ -141,7 +77,7 @@ public class MariadbRelationalConnector extends RelationalDbConnector {
 	 */
 	@Override
 	protected String getDatabasePassword() {
-		readConfigFile();
+		readConfigData(BenchFoundryConfigData.dbConnectorConfigFile);
 		return PassCached;
 	}
 
@@ -154,7 +90,7 @@ public class MariadbRelationalConnector extends RelationalDbConnector {
 	 */
 	@Override
 	protected String getDatabaseName() {
-		readConfigFile();
+		readConfigData(BenchFoundryConfigData.dbConnectorConfigFile);
 		return DatabaseCached;
 	}
 
@@ -179,6 +115,69 @@ public class MariadbRelationalConnector extends RelationalDbConnector {
 	protected void applySerializedImplSpecificData(byte[] serializedData) {
 		// no need to do anything here unless we change
 		// getSerializedImplSpecificData()
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.tuberlin.ise.benchfoundry.connectors.IDbConnector#readConfigData(java
+	 * .lang.String)
+	 */
+	@Override
+	public void readConfigData(String configFilename) {
+		if (URICached != null)
+			return; // will be executed only once
+		Properties prop = new Properties();
+		InputStream propIn;
+		try {
+			propIn = new FileInputStream(configFilename);
+
+			prop.load(propIn);
+
+			if (!prop.containsKey(URI_KEY)) {
+				throw new IllegalArgumentException(
+						"Missing property with key '" + URI_KEY
+								+ "' in MariaDB configuration file '"
+								+ configFilename + "'.");
+			}
+			if (!prop.containsKey(USER_KEY)) {
+				throw new IllegalArgumentException(
+						"Missing property with key '" + USER_KEY
+								+ "' in MariaDB configuration file '"
+								+ configFilename + "'.");
+			}
+			if (!prop.containsKey(PASS_KEY)) {
+				throw new IllegalArgumentException(
+						"Missing property with key '" + PASS_KEY
+								+ "' in MariaDB configuration file '"
+								+ configFilename + "'.");
+			}
+			if (!prop.containsKey(DB_KEY)) {
+				throw new IllegalArgumentException(
+						"Missing property with key '" + DB_KEY
+								+ "' in MariaDB configuration file '"
+								+ configFilename + "'.");
+			}
+
+			URICached = prop.getProperty(URI_KEY);
+			UserCached = prop.getProperty(USER_KEY, "root");
+			PassCached = prop.getProperty(PASS_KEY, "root");
+			DatabaseCached = prop.getProperty(DB_KEY, "test");
+
+			if (URICached == null || URICached.length() == 0)
+				throw new IllegalArgumentException("Illegal value for key '"
+						+ URI_KEY + "' in MariaDB configuration file '"
+						+ configFilename + "'.");
+
+		} catch (Exception e) {
+			LOG.fatal("Cannot run the MariaDB connector of BenchFoundry"
+					+ " without dbconnector config file. Reading config file "
+					+ configFilename + " failed: " + e.getMessage());
+			e.printStackTrace();
+			System.exit(-1);
+
+		}
 	}
 
 }

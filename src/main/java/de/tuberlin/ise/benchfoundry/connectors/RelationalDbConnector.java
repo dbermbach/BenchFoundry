@@ -292,8 +292,9 @@ public abstract class RelationalDbConnector implements IDbConnector {
 						"No connection to database established.");
 
 			for (String query : queries) {
+				LOG.info("Creating table with query: "+query);
 				Statement stmt = dbConnection.createStatement();
-				stmt.executeQuery(query);
+				stmt.executeUpdate(query);
 				// LOG.info(stmt);
 			}
 			LOG.info("Successfully created tables.");

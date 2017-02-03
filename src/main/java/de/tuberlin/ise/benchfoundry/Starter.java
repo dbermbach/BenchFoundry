@@ -251,6 +251,9 @@ public class Starter {
 			e.printStackTrace();
 			System.exit(-1);
 		}
+		LOG.info("Configuring DB Connector.");
+		BenchFoundryConfigData.dbConnector
+				.readConfigData(BenchFoundryConfigData.dbConnectorConfigFile);
 
 		LOG.info("Configuring SUT.");
 		// create schema on SUT
