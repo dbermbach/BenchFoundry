@@ -50,7 +50,7 @@ public abstract class RelationalDbConnector implements IDbConnector {
 	private static final Logger LOG = LogManager
 			.getLogger(RelationalDbConnector.class);
 
-	/** URI where the database system can be reached */
+	/** URI where the actual database can be reached */
 	private String uri;
 
 	/** user name for the database system */
@@ -61,9 +61,11 @@ public abstract class RelationalDbConnector implements IDbConnector {
 
 	/** name of the test database */
 	private String databaseName;
-	
-	/**optional URI suffix inserted after uri+databaseName*/
-	private String databaseURISuffix;
+
+	/**
+	 * where the bare database system without a concrete database can be reached
+	 */
+	private String systemURI;
 
 	/**
 	 * Lookup of {@link RelationalTransactions} by ID of
@@ -85,7 +87,7 @@ public abstract class RelationalDbConnector implements IDbConnector {
 			this.uri = getDatabaseURI();
 			this.user = getDatabaseUsername();
 			this.pass = getDatabasePassword();
-			this.databaseURISuffix = getDatabaseURISuffix();
+			this.systemURI = getDatabaseSystemURI();
 		}
 	}
 
@@ -249,12 +251,17 @@ public abstract class RelationalDbConnector implements IDbConnector {
 	 */
 	@Override
 	public void setupPhysicalSchema(AbstractPhysicalSchema schema) {
-		if (requiresExplicitDatabaseCreation()) {
+		if (!BenchFoundryConfigData.masterInstance)
+			return;
+		if (systemURI == null)
+			this.systemURI = getDatabaseSystemURI();
+		if (systemURI != null) {
 			// create database
 			try {
-				dbConnection = DriverManager.getConnection(uri+databaseURISuffix, user, pass);
-				LOG.info("Successfully established connection to database at endpoint '"
-						+ uri + "'.");
+				dbConnection = DriverManager.getConnection(systemURI, user,
+						pass);
+				LOG.info("Successfully established connection to database system at endpoint '"
+						+ systemURI + "'.");
 				Statement stmt = dbConnection.createStatement();
 				stmt.executeQuery("DROP DATABASE IF EXISTS " + databaseName
 						+ ";");
@@ -262,9 +269,10 @@ public abstract class RelationalDbConnector implements IDbConnector {
 				LOG.info("Successfully created database '" + databaseName
 						+ "'.");
 			} catch (SQLException e) {
-				LOG.error("Failed to created database: " + e.getMessage());
+				LOG.error("Failed to create database " + databaseName
+						+ " at endpoint " + systemURI + ":" + e.getMessage());
 				throw new IllegalStateException("Failed to create database "
-						+ databaseName + ".", e);
+						+ databaseName + " at endpoint " + systemURI + ".", e);
 			}
 		}
 		// recreate connection to new database
@@ -306,8 +314,7 @@ public abstract class RelationalDbConnector implements IDbConnector {
 	public void init() {
 		// recreate connection to database
 		try {
-			dbConnection = DriverManager.getConnection(uri + databaseName+databaseURISuffix,
-					user, pass);
+			dbConnection = DriverManager.getConnection(uri, user, pass);
 		} catch (SQLException e) {
 			LOG.error("Could not connect to database: " + e.getMessage());
 			throw new IllegalStateException("Could not connect to database "
@@ -418,7 +425,6 @@ public abstract class RelationalDbConnector implements IDbConnector {
 			oos.writeObject(this.user);
 			oos.writeObject(this.pass);
 			oos.writeObject(this.databaseName);
-			oos.writeObject(this.databaseURISuffix);
 			byte[] implSpecific = getSerializedImplSpecificData();
 			if (implSpecific == null)
 				implSpecific = "N/A".getBytes();
@@ -447,7 +453,6 @@ public abstract class RelationalDbConnector implements IDbConnector {
 			this.user = (String) ois.readObject();
 			this.pass = (String) ois.readObject();
 			this.databaseName = (String) ois.readObject();
-			this.databaseURISuffix = (String) ois.readObject();
 			byte[] implSpecific = (byte[]) ois.readObject();
 			if (!new String(implSpecific).equals("N/A"))
 				applySerializedImplSpecificData(implSpecific);
@@ -470,9 +475,11 @@ public abstract class RelationalDbConnector implements IDbConnector {
 	 */
 	@Override
 	public void cleanUpDatabase() {
+		if (!BenchFoundryConfigData.masterInstance || systemURI == null)
+			return;
 		try {
-			dbConnection = DriverManager.getConnection(uri, user, pass);
-			LOG.info("Successfully established connection to database at endpoint '"
+			dbConnection = DriverManager.getConnection(systemURI, user, pass);
+			LOG.info("Successfully established connection to bare database system at endpoint '"
 					+ uri + "'.");
 			Statement stmt = dbConnection.createStatement();
 			stmt.executeQuery("DROP DATABASE IF EXISTS " + databaseName + ";");
@@ -506,20 +513,22 @@ public abstract class RelationalDbConnector implements IDbConnector {
 	}
 
 	/**
-	 * Note: The URI and the database name will be concatenated without
-	 * inserting any additional characters. So, make sure that both URI alone
-	 * works but URI+dbName works as well.
 	 * 
-	 * @return the URI where the database system can be reached
+	 * 
+	 * @return the full URI where the actual database can be reached over JDBC
 	 */
 	protected abstract String getDatabaseURI();
 
 	/**
 	 * 
-	 * @return optional arguments that need to be appended after URI+databaseName
+	 * @return the full URI where the database system can be reached over JDBC.
+	 *         The returned value should not include a database name as the
+	 *         connector, if this method returns anything but null, will try to
+	 *         create a database with the name provided by getDatabaseName()
+	 *         under this URI.
 	 */
-	protected abstract String getDatabaseURISuffix();
-	
+	protected abstract String getDatabaseSystemURI();
+
 	/**
 	 * 
 	 * @return the username which allows access to the database system
@@ -559,12 +568,5 @@ public abstract class RelationalDbConnector implements IDbConnector {
 	 */
 	protected abstract void applySerializedImplSpecificData(
 			byte[] serializedData);
-
-	/**
-	 * 
-	 * @return true when BenchFoundry shall explicitly invoke the CREATE
-	 *         DATABASE operation during the setup process
-	 */
-	protected abstract boolean requiresExplicitDatabaseCreation();
 
 }

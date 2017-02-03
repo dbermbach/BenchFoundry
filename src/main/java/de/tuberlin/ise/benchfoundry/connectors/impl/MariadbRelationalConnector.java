@@ -106,6 +106,18 @@ public class MariadbRelationalConnector extends RelationalDbConnector {
 	@Override
 	protected String getDatabaseURI() {
 		readConfigFile();
+		return URICached + DatabaseCached;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.tuberlin.ise.benchfoundry.connectors.RelationalDbConnector#
+	 * getDatabaseSystemURI()
+	 */
+	@Override
+	protected String getDatabaseSystemURI() {
+		readConfigFile();
 		return URICached;
 	}
 
@@ -167,22 +179,6 @@ public class MariadbRelationalConnector extends RelationalDbConnector {
 	protected void applySerializedImplSpecificData(byte[] serializedData) {
 		// no need to do anything here unless we change
 		// getSerializedImplSpecificData()
-	}
-
-	/* (non-Javadoc)
-	 * @see de.tuberlin.ise.benchfoundry.connectors.RelationalDbConnector#requiresExplicitDatabaseCreation()
-	 */
-	@Override
-	protected boolean requiresExplicitDatabaseCreation() {
-		return true;
-	}
-
-	/* (non-Javadoc)
-	 * @see de.tuberlin.ise.benchfoundry.connectors.RelationalDbConnector#getDatabaseURISuffix()
-	 */
-	@Override
-	protected String getDatabaseURISuffix() {
-		return "";
 	}
 
 }

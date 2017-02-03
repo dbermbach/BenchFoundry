@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
 import de.tuberlin.ise.benchfoundry.connectors.RelationalDbConnector;
@@ -32,9 +31,17 @@ public class DerbyRelationalConnector extends RelationalDbConnector {
 	 */
 	@Override
 	protected String getDatabaseURI() {
-		return "jdbc:derby:memory:";
+		return "jdbc:derby:memory:derby;create=true";
 	}
 
+	/* (non-Javadoc)
+	 * @see de.tuberlin.ise.benchfoundry.connectors.RelationalDbConnector#getDatabaseSystemURI()
+	 */
+	@Override
+	protected String getDatabaseSystemURI() {
+		return null;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -69,27 +76,7 @@ public class DerbyRelationalConnector extends RelationalDbConnector {
 		return "derby";
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.tuberlin.ise.benchfoundry.connectors.RelationalDbConnector#
-	 * requiresExplicitDatabaseCreation()
-	 */
-	@Override
-	protected boolean requiresExplicitDatabaseCreation() {
-		return false;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.tuberlin.ise.benchfoundry.connectors.RelationalDbConnector#
-	 * getDatabaseURISuffix()
-	 */
-	@Override
-	protected String getDatabaseURISuffix() {
-		return ";create=true";
-	}
+	
 
 	/*
 	 * (non-Javadoc)
@@ -115,37 +102,39 @@ public class DerbyRelationalConnector extends RelationalDbConnector {
 
 	}
 
-	public static void main(String[] args) throws Exception {
-		LoggerContext context = (org.apache.logging.log4j.core.LoggerContext) LogManager
-				.getContext(false);
-		File file = new File("log4j2.xml");
-		context.setConfigLocation(file.toURI());
+//	public static void main(String[] args) throws Exception {
+//		LoggerContext context = (org.apache.logging.log4j.core.LoggerContext) LogManager
+//				.getContext(false);
+//		File file = new File("log4j2.xml");
+//		context.setConfigLocation(file.toURI());
+//
+//		DerbyRelationalConnector derby = new DerbyRelationalConnector();
+//		derby.init();
+//		Connection dbConnection = derby.getDbConnection();
+//
+//		Statement stmt = dbConnection.createStatement();
+//		// drop table
+//		// stmt.executeUpdate("Drop Table users");
+//
+//		// create table
+//		stmt.executeUpdate("Create table users (id int primary key, name varchar(30))");
+//
+//		// insert 2 rows
+//		stmt.executeUpdate("insert into users values (1,'tom')");
+//		stmt.executeUpdate("insert into users values (2,'peter')");
+//
+//		// query
+//		ResultSet rs = stmt.executeQuery("SELECT * FROM users");
+//
+//		// print out query result
+//		while (rs.next()) {
+//			System.out
+//					.printf("%d\t%s\n", rs.getInt("id"), rs.getString("name"));
+//		}
+//
+//		derby.cleanUpDatabase();
+//	}
 
-		DerbyRelationalConnector derby = new DerbyRelationalConnector();
-		derby.init();
-		Connection dbConnection = derby.getDbConnection();
-
-		Statement stmt = dbConnection.createStatement();
-		// drop table
-		// stmt.executeUpdate("Drop Table users");
-
-		// create table
-		stmt.executeUpdate("Create table users (id int primary key, name varchar(30))");
-
-		// insert 2 rows
-		stmt.executeUpdate("insert into users values (1,'tom')");
-		stmt.executeUpdate("insert into users values (2,'peter')");
-
-		// query
-		ResultSet rs = stmt.executeQuery("SELECT * FROM users");
-
-		// print out query result
-		while (rs.next()) {
-			System.out
-					.printf("%d\t%s\n", rs.getInt("id"), rs.getString("name"));
-		}
-
-		derby.cleanUpDatabase();
-	}
+	
 
 }
