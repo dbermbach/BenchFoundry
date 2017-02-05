@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>org.apache.thrift</groupId>
 			<artifactId>libthrift</artifactId>
-			<version>0.9.3</version>
+			<version>0.10.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.beust</groupId>
@@ -153,6 +153,7 @@
 					<thriftExecutable>${thrift.executable}</thriftExecutable>
 					<thriftSourceRoot>${basedir}/src/main/thrift</thriftSourceRoot>
 					<outputDirectory>${basedir}/src/generated</outputDirectory>
+                                        <generator>java</generator>
 				</configuration>
 				<executions>
 					<execution>
