@@ -3,14 +3,6 @@
  */
 package de.tuberlin.ise.benchfoundry.connectors.impl;
 
-import java.io.File;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.LoggerContext;
-
 import de.tuberlin.ise.benchfoundry.connectors.RelationalDbConnector;
 
 /**

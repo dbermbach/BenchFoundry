@@ -28,6 +28,8 @@ Hint: currently, some unit tests may be broken - make sure to skip tests for bui
 ### Consistency Benchmark
 Simply run the main class de.tuberlin.ise.benchfoundry.tracegeneration.consistencybenchmark.ConsistencyBenchmarkingTraceGenerator which will interactively query input parameters and create the output trace file. Additional parameters are (somewhat hidden) in class de.tuberlin.ise.benchfoundry.tracegeneration.consistencybenchmark.StaticContent
 
+To create a very simple example trace, run the trace generator and (when prompted) enter 1m for the first prompt and 1 for all other ones afterwards. Next, create a folder named consbench in the project folder, move all files starting with consbench into that folder and simply run BenchFoundry with the existing benchfoundry.properties file which can be found in the project main folder.
+
 ### TPC-C Inspired Benchmark
 #### Main Class
 de.tuberlin.ise.benchfoundry.tracegeneration.tpccinspiredbenchmark.TraceGenerator.java
