@@ -257,7 +257,7 @@ public class BusinessProcess implements Runnable {
 		for (BusinessTransaction t : this.transactions) {
 			str += t.toString() + "\n";
 		}
-		str += "EOP\n";
+		str += "EOP";
 		return str;
 	}
 

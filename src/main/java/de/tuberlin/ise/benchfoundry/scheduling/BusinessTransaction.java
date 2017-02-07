@@ -218,7 +218,7 @@ public class BusinessTransaction {
 		for (BusinessOperation b : this.operations) {
 			str += b.toString() + "\n";
 		}
-		str += "EOT\n";
+		str += "EOT";
 		return str;
 	}
 }

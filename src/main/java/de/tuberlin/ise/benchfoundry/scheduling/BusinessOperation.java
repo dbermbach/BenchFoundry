@@ -90,6 +90,6 @@ public class BusinessOperation {
 	 * Returns a string representation of the business operation suitable for tracing and logging.
 	 */
 	public String toString() {
-		return this.logicalQueryId + ";" + this.paramsetId + ";" + this.custParamsetId + "\n";
+		return this.logicalQueryId + ";" + this.paramsetId + ";" + this.custParamsetId;
 	}
 }

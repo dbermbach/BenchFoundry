@@ -7,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,9 +44,22 @@ public class TraceParser {
 		this.doMeasurements = doMeasurements;
 		try {
 			input = new BufferedReader(new FileReader(traceFile));
-		} catch (NullPointerException|FileNotFoundException e) {
+		} catch (NullPointerException | FileNotFoundException e) {
 			endOfFile = true;
 		}
+	}
+
+	/**
+	 * 
+	 * @param traceStream
+	 *            a stream from the trace file that shall be parsed
+	 * @param doMeasurements
+	 *            describes whether measurement results shall be persisted and
+	 *            is passed on all created {@link BusinessProcess} instances
+	 */
+	public TraceParser(InputStream traceStream, boolean doMeasurements) {
+		this.doMeasurements = doMeasurements;
+		input = new BufferedReader(new InputStreamReader(traceStream));
 	}
 
 	/**
