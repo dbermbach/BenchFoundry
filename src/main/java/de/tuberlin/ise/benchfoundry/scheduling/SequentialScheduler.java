@@ -17,6 +17,7 @@ import de.tuberlin.ise.benchfoundry.util.BenchFoundryConfigData;
 import de.tuberlin.ise.benchfoundry.util.CustomThreadFactoryBuilder;
 import de.tuberlin.ise.benchfoundry.util.Phase;
 import de.tuberlin.ise.benchfoundry.util.SelectiveLogEntry;
+import de.tuberlin.ise.benchfoundry.util.Time;
 
 /**
  * This class should be used for preload and warm-up phases as it will ignore
@@ -44,12 +45,19 @@ public class SequentialScheduler implements Runnable {
 	/** trace parser */
 	private final TraceParser trace;
 
-	private final static int NUMBER_OF_THREADS = BenchFoundryConfigData._numberOfThreadsInSequentialScheduler;
-
+	/** thread pool size*/
+	private final int numberOfThreads;
+	
 	private final ExecutorService pool;
 
 	/** name of the phase in which this scheduler is responsible */
 	private final Phase phase;
+
+	/**
+	 * when this scheduler is used in the experiment phase, it should not start
+	 * before Time.now() returns 0
+	 */
+	private final boolean waitUntilTimeZero;
 
 	/**
 	 * @param doMeasurements
@@ -63,13 +71,37 @@ public class SequentialScheduler implements Runnable {
 	 */
 	public SequentialScheduler(boolean doMeasurements, String traceFilename,
 			Phase phase) {
+		this(doMeasurements, traceFilename, phase, false,
+				BenchFoundryConfigData._defaultNumberOfThreadsInSequentialScheduler);
+	}
+
+	/**
+	 * @param doMeasurements
+	 *            only log measurement results if set to true, otherwise this
+	 *            business process is part of a warm up/clean action
+	 * @param traceFilename
+	 *            absolute path to the file which stores the trace that shall be
+	 *            used
+	 * @param phase
+	 *            name of the phase in which this scheduler is responsible
+	 * @param waitUntilTimeZero
+	 *            when this scheduler is used in the experiment phase, it should
+	 *            not start before Time.now() returns 0. Setting this flag to
+	 *            true triggers that delay.
+	 * @param numberOfThreads
+	 *            the thread pool size that will be used for execution
+	 */
+	public SequentialScheduler(boolean doMeasurements, String traceFilename,
+			Phase phase, boolean waitUntilTimeZero, int numberOfThreads) {
 		super();
 		trace = new TraceParser(traceFilename, doMeasurements);
 		this.phase = phase;
 		pool = Executors.newFixedThreadPool(
-				NUMBER_OF_THREADS,
+				numberOfThreads,
 				new CustomThreadFactoryBuilder().setNamePrefix(
 						phase + "-thread").build());
+		this.waitUntilTimeZero = waitUntilTimeZero;
+		this.numberOfThreads = numberOfThreads;
 		LOG.info("Scheduler for phase " + phase + " initialized.");
 	}
 
@@ -80,6 +112,9 @@ public class SequentialScheduler implements Runnable {
 	 */
 	@Override
 	public void run() {
+		LOG.info("Scheduler for phase " + phase + " is ready to start.");
+		if (waitUntilTimeZero)
+			waitUntilStart();
 		LOG.info("Scheduler for phase " + phase + " started.");
 		Set<Future<?>> executing = new HashSet<Future<?>>();
 		Set<Future<?>> done = new HashSet<Future<?>>();
@@ -100,7 +135,7 @@ public class SequentialScheduler implements Runnable {
 			// if the pool is busy, check whether any of the processes has been
 			// completely executed
 			while (!(Thread.currentThread().isInterrupted())
-					&& executing.size() >= NUMBER_OF_THREADS) {
+					&& executing.size() >= numberOfThreads) {
 				done.clear();
 				for (Future<?> f : executing) {
 					if (f.isDone())
@@ -128,6 +163,19 @@ public class SequentialScheduler implements Runnable {
 			LOG.info("Some processes of phase " + phase
 					+ " may still be running.");
 		}
+	}
+
+	/**
+	 * waits until the experiment start.
+	 */
+	private void waitUntilStart() {
+		try {
+			Time.waitUntilRelativeTime(-1);
+		} catch (InterruptedException e) {
+			LOG.error("The scheduler was interrupted before starting execution, terminating.");
+			System.exit(-1);
+		}
+
 	}
 
 	/**

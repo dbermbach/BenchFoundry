@@ -504,16 +504,38 @@ public class Starter {
 	 */
 	private static Thread startExperiment() {
 		// start scheduler for benchmark phase
-		Scheduler scheduler;
-		if (BenchFoundryConfigData.masterInstance)
-			scheduler = new Scheduler(true,
-					BenchFoundryConfigData.traceFilenameExperiment
-							+ buildTempFileSuffix("master"), Phase.EXPERIMENT);
-		else
-			scheduler = new Scheduler(true,
-					BenchFoundryConfigData.traceFilenameExperiment,
-					Phase.EXPERIMENT);
-		Thread schedulerThread = new Thread(scheduler);
+		Thread schedulerThread = null;
+		if (BenchFoundryConfigData.closedWorkloadSchedulerInExperiment) {
+			SequentialScheduler scheduler;
+			if (BenchFoundryConfigData.masterInstance)
+				scheduler = new SequentialScheduler(
+						true,
+						BenchFoundryConfigData.traceFilenameExperiment
+								+ buildTempFileSuffix("master"),
+						Phase.EXPERIMENT,
+						true,
+						BenchFoundryConfigData.closedWorkloadSchedulerThreadpoolSize);
+			else
+				scheduler = new SequentialScheduler(
+						true,
+						BenchFoundryConfigData.traceFilenameExperiment,
+						Phase.EXPERIMENT,
+						true,
+						BenchFoundryConfigData.closedWorkloadSchedulerThreadpoolSize);
+			schedulerThread = new Thread(scheduler);
+		} else {
+			Scheduler scheduler;
+			if (BenchFoundryConfigData.masterInstance)
+				scheduler = new Scheduler(true,
+						BenchFoundryConfigData.traceFilenameExperiment
+								+ buildTempFileSuffix("master"),
+						Phase.EXPERIMENT);
+			else
+				scheduler = new Scheduler(true,
+						BenchFoundryConfigData.traceFilenameExperiment,
+						Phase.EXPERIMENT);
+			schedulerThread = new Thread(scheduler);
+		}
 		schedulerThread.setName("EXPERIMENT");
 		schedulerThread.start();
 		return schedulerThread;
