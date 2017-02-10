@@ -403,9 +403,14 @@ public class BenchFoundryConfigData {
 						+ closedWorkloadSchedulerThreadpoolSize
 						+ " business processes in parallel.");
 				break;
+
+			default:
+				LOG.error("Did not recognize the key " + splits[0]
+						+ " with value " + splits[1]
+						+ " in the BenchFoundry properties file.");
+				break;
 			}
 		}
-
 	}
 
 	/**
