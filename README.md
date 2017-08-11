@@ -2,7 +2,7 @@
 BenchFoundry is a natively distributed benchmarking framework for the execution of arbitrary application-driven cloud database benchmarks against OLTP databases. BenchFoundry logs detailed results which can be used to determine arbitrary measured qualities and to identify even minor instances of unusual behavior. For repeatability reasons, BenchFoundry executes workload traces instead of generating them on the fly.
 
 ## Build process
-1. Install Apache Thrift from [https://thrift.apache.org/download]
+1. Install Apache Thrift from <https://thrift.apache.org/download>
 2. Copy teams.properties.example to teams.properties
 3. Edit `teams.properties` to set `thrift.executable` to the Thrift executable path
 4. Now build and test with 
